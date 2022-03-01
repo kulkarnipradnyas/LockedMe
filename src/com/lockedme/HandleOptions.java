@@ -1,5 +1,6 @@
 package com.lockedme;
 
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -63,15 +64,24 @@ public class HandleOptions {
 
 					String deletionPrompt = "\nSelect index of which file to delete?"
 							+ "\nEnter 0 if you want to delete all elements)";
-					System.out.println(deletionPrompt);
-
+					if (filesToDelete.size() > 0) {
+						System.out.println(deletionPrompt);
+					} else
+						handleFileMenuOptions();
 					int idx = sc.nextInt();
 
 					if (idx != 0) {
-						if (idx > filesToDelete.size() - 1) {
+						// if user press index more than 
+						try {
+							String pathForFileDeletion=filesToDelete.get(idx - 1);
+							FileOperations.deleteFileRecursively(pathForFileDeletion);
+							
+						}catch(IndexOutOfBoundsException i) {
 							System.out.println("\nSelected index which does not exist!!");
-						} else
-							FileOperations.deleteFileRecursively(filesToDelete.get(idx - 1));
+						}catch(InputMismatchException e) {
+							System.out.println("\nPlease select appropriate option!!");
+						}
+						
 					} else {
 
 						// If idx == 0, delete all files displayed for the name
@@ -103,7 +113,10 @@ public class HandleOptions {
 					System.out.println("Please select a valid option from above.");
 				}
 			} catch (Exception e) {
-				System.out.println(e.getClass().getName());
+				if (e instanceof InputMismatchException) {
+					System.out.println("Please select a valid option from above.");
+				}
+
 				handleFileMenuOptions();
 			}
 		} while (running == true);

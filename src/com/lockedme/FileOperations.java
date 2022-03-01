@@ -45,9 +45,9 @@ public class FileOperations {
 		File[] files = dir.listFiles();
 		List<File> filesList = Arrays.asList(files);
 		if (files != null && files.length > 0) {
-			
+
 			Collections.sort(filesList);
-			
+
 			for (File file : filesList) {
 
 				System.out.print(" ".repeat(indentationCount * 2));
@@ -86,7 +86,7 @@ public class FileOperations {
 			if (choice.equalsIgnoreCase("y")) {
 				System.out.println("\n\nInput content and press enter\n");
 				String content = sc.nextLine();
-				
+
 				Files.write(pathToFile, content.getBytes());
 				System.out.println("\nContent written to file " + fileToAdd);
 				System.out.println("Content can be read using Notepad or Notepad++");
@@ -94,11 +94,12 @@ public class FileOperations {
 
 		} catch (IOException e) {
 			System.out.println("Failed to create file " + fileToAdd);
-			  if (e instanceof FileAlreadyExistsException) {
-				
-			  System.out.println("File "+  fileToAdd + " already exist!!");
-			}else System.out.println(e.getClass().getName());
-			
+			if (e instanceof FileAlreadyExistsException) {
+
+				System.out.println("File " + fileToAdd + " already exist!!");
+			} else
+				System.out.println(e.getClass().getName());
+
 		}
 	}
 
@@ -145,28 +146,29 @@ public class FileOperations {
 
 		File currFile = new File(path);
 		File[] files = currFile.listFiles();
+		
+			if (files != null && files.length > 0) {
+				for (File file : files) {
 
-		if (files != null && files.length > 0) {
-			for (File file : files) {
+					String fileName = file.getName() + " at " + file.getParent();
+					if (file.isDirectory()) {
+						deleteFileRecursively(file.getAbsolutePath());
+					}
 
-				String fileName = file.getName() + " at " + file.getParent();
-				if (file.isDirectory()) {
-					deleteFileRecursively(file.getAbsolutePath());
-				}
-
-				if (file.delete()) {
-					System.out.println(fileName + " deleted successfully");
-				} else {
-					System.out.println("Failed to delete " + fileName);
+					if (file.delete()) {
+						System.out.println(fileName + " deleted successfully");
+					} else {
+						System.out.println("Failed to delete " + fileName);
+					}
 				}
 			}
-		}
 
-		String currFileName = currFile.getName() + " at " + currFile.getParent();
-		if (currFile.delete()) {
-			System.out.println(currFileName + " deleted successfully");
-		} else {
-			System.out.println("Failed to delete " + currFileName);
-		}
+			String currFileName = currFile.getName() + " at " + currFile.getParent();
+			if (currFile.delete()) {
+				System.out.println(currFileName + " deleted successfully");
+			} else {
+				System.out.println("Failed to delete " + currFileName);
+			}
+		
 	}
 }
